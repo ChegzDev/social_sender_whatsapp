@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_sender_whatsapp/social_sender_whatsapp.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,6 +17,7 @@ class _MyAppState extends State<MyApp> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
   List<String> _selectedFilePaths = [];
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void dispose() {
@@ -25,19 +26,16 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
-  Future<void> _pickFiles() async {
+  Future<void> _pickImages() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-      );
-
-      if (result != null) {
+      final List<XFile> images = await _picker.pickMultiImage();
+      if (images.isNotEmpty) {
         setState(() {
-          _selectedFilePaths = result.paths.whereType<String>().toList();
+          _selectedFilePaths = images.map((image) => image.path).toList();
         });
       }
     } catch (e) {
-      debugPrint("Error picking files: $e");
+      debugPrint("Error picking images: $e");
     }
   }
 
@@ -108,14 +106,14 @@ class _MyAppState extends State<MyApp> {
                   child: Column(
                     children: [
                       ElevatedButton.icon(
-                        onPressed: _pickFiles,
-                        icon: const Icon(Icons.attach_file),
-                        label: const Text("Select Files (Optional)"),
+                        onPressed: _pickImages,
+                        icon: const Icon(Icons.photo_library),
+                        label: const Text("Select Images (Optional)"),
                       ),
                       if (_selectedFilePaths.isNotEmpty) ...[
                         const Divider(),
                         Text(
-                          "${_selectedFilePaths.length} file(s) selected:",
+                          "${_selectedFilePaths.length} image(s) selected:",
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 4),
