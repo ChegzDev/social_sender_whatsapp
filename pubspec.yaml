@@ -1,6 +1,6 @@
 name: social_sender_whatsapp
 description: "A Flutter plugin to send WhatsApp messages and share files to specific phone numbers or via general share on Android and iOS."
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/ChegzDev/social_sender_whatsapp
 repository: https://github.com/ChegzDev/social_sender_whatsapp
 issue_tracker: https://github.com/ChegzDev/social_sender_whatsapp/issues

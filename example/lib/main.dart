@@ -13,9 +13,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final TextEditingController _phoneController = TextEditingController();
+
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    _phoneController.dispose();
+    super.dispose();
   }
 
   @override
@@ -25,23 +28,36 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Social Sender WhatsApp Example'),
         ),
-        body: Center(
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              TextField(
+                controller: _phoneController,
+                decoration: const InputDecoration(
+                  labelText: "Phone Number (with country code)",
+                  hintText: "+1234567890",
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.phone,
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () => _send(phone: "+1234567890", text: "Hi, how are you?"),
+                onPressed: () =>
+                    _send(phone: _phoneController.text, text: "Hi, how are you?"),
                 child: const Text('Send Text to Number'),
               ),
               ElevatedButton(
                 onPressed: () => _send(text: "Hi, this is a general share"),
                 child: const Text('Send Text (Optional Number)'),
               ),
-              const Divider(),
+              const Divider(height: 40),
               const Text("Note: Sharing files requires valid paths"),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () => _send(
-                  phone: "+1234567890",
+                  phone: _phoneController.text,
                   text: "Check out this file",
                   files: ["/storage/emulated/0/Download/test.pdf"], // Example path
                 ),
