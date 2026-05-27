@@ -64,14 +64,11 @@ class SocialSenderWhatsappException implements Exception {
 
 /// An enum that defines the types of exceptions that can be thrown by the [SocialSenderWhatsapp] class.
 enum SocialSenderWhatsappExceptionType {
-  /// The user has not granted the app permission (internal use).
-  permissionRequired,
-
-  /// The phone number is required for the requested operation.
-  phoneRequired,
-
   /// WhatsApp is not installed on the device.
   whatsappNotInstalled,
+
+  /// One or more provided file paths are invalid or inaccessible.
+  fileNotFound,
 
   /// An unknown error occurred.
   unknown,

@@ -1,6 +1,14 @@
 # Social Sender WhatsApp
 
+[![Pub Version](https://img.shields.io/pub/v/social_sender_whatsapp?color=blue)](https://pub.dev/packages/social_sender_whatsapp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Pub Likes](https://img.shields.io/pub/likes/social_sender_whatsapp)](https://pub.dev/packages/social_sender_whatsapp/score)
+[![Pub Points](https://img.shields.io/pub/points/social_sender_whatsapp)](https://pub.dev/packages/social_sender_whatsapp/score)
+[![Popularity](https://img.shields.io/pub/popularity/social_sender_whatsapp)](https://pub.dev/packages/social_sender_whatsapp/score)
+
 A Flutter plugin for sending WhatsApp messages and sharing files directly to specific phone numbers or via a general share sheet on both Android and iOS.
+
+<a href="https://www.buymeacoffee.com/chegz" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 ## Features
 
@@ -8,6 +16,7 @@ A Flutter plugin for sending WhatsApp messages and sharing files directly to spe
 *   **Share Files**: Share single or multiple files (PDFs, Images, etc.) to WhatsApp.
 *   **Optional Phone Number**: If the phone number is not provided, it opens the WhatsApp contact picker (Android) or the system share sheet (iOS).
 *   **WhatsApp Business Support**: Automatically detects and offers sharing via WhatsApp or WhatsApp Business on Android.
+*   **Integrated Error Handling**: Throws structured exceptions for easier debugging.
 
 ## Getting Started
 
@@ -46,6 +55,15 @@ Add the `FileProvider` within the `<application>` tag:
 </application>
 ```
 
+Create `android/app/src/main/res/xml/provider_paths.xml`:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path name="external_files" path="." />
+</paths>
+```
+
 ### iOS Setup
 
 Add the following to your `Info.plist` to allow the app to check if WhatsApp is installed:
@@ -59,22 +77,24 @@ Add the following to your `Info.plist` to allow the app to check if WhatsApp is 
 
 ## Usage
 
-### Send a Text Message
+### Simple Text Message
 
 ```dart
 import 'package:social_sender_whatsapp/social_sender_whatsapp.dart';
 
+// Send a pre-filled message to a specific number
 await SocialSenderWhatsapp.instance.send(
   phone: "1234567890",
   text: "Hello from Flutter!",
 );
 ```
 
-### Share Files
+### Sharing Files
 
 ```dart
+// Share multiple files with an optional message
 await SocialSenderWhatsapp.instance.send(
-  phone: "1234567890", // Optional
+  phone: "1234567890", // Optional: opens contact picker if omitted on Android
   text: "Check out these files",
   files: [
     "/path/to/file1.pdf",
@@ -88,8 +108,18 @@ await SocialSenderWhatsapp.instance.send(
 The plugin throws `SocialSenderWhatsappException` which contains a `type` identifying the error:
 
 *   `WHATSAPP_NOT_INSTALLED`: WhatsApp is not found on the device.
-*   `PHONE_REQUIRED`: Thrown if logic specifically requires a phone number but none was provided (rare).
+*   `FILE_NOT_FOUND`: One or more provided file paths are invalid or inaccessible (Android).
 *   `UNKNOWN`: Any other platform-specific error.
+
+## Support and Feedback
+
+If you encounter any issues or have suggestions, feel free to open an issue on the [GitHub repository](https://github.com/ChegzDev/social_sender_whatsapp/issues).
+
+## Contributors
+
+<a href="https://github.com/ChegzDev/social_sender_whatsapp/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ChegzDev/social_sender_whatsapp" alt="Contributors" />
+</a>
 
 ## License
 

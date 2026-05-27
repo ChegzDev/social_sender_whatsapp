@@ -97,6 +97,22 @@ void main() {
       );
     });
 
+    test('throws SocialSenderWhatsappException on fileNotFound', () async {
+      mockPlatform.throwException = PlatformException(
+        code: 'FILE_NOT_FOUND',
+        message: 'File not found',
+      );
+
+      expect(
+        () => plugin.send(files: ["bad/path"]),
+        throwsA(isA<SocialSenderWhatsappException>().having(
+          (e) => e.type,
+          'type',
+          SocialSenderWhatsappExceptionType.fileNotFound,
+        )),
+      );
+    });
+
     test('throws SocialSenderWhatsappException on unknown error', () async {
       mockPlatform.throwException = PlatformException(
         code: 'RANDOM_ERROR',
