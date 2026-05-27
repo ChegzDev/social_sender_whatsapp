@@ -1,0 +1,25 @@
+name: social_sender_whatsapp_example
+description: "Demonstrates how to use the social_sender_whatsapp plugin for sending messages and sharing files."
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  social_sender_whatsapp:
+    path: ../
+
+  cupertino_icons: ^1.0.9
+
+dev_dependencies:
+  integration_test:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
