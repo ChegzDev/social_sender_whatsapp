@@ -1,3 +1,9 @@
+## 1.0.1
+
+* Removed hardcoded personal phone number from example app and replaced with a user-input field.
+* Cleaned sensitive information from git history.
+* Improved example app usability for testing.
+
 ## 1.0.0
 
 * Initial release of the `social_sender_whatsapp` plugin.
