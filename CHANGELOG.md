@@ -1,8 +1,10 @@
 ## 1.0.1
 
-* Removed hardcoded personal phone number from example app and replaced with a user-input field.
-* Cleaned sensitive information from git history.
-* Improved example app usability for testing.
+* **Privacy Fix**: Removed hardcoded personal phone number from example and git history.
+* **Major Example Update**: Replaced the static example app with a dynamic form.
+    * Added ability to input custom phone numbers and messages.
+    * Integrated `file_picker` to demonstrate real-world file sharing capabilities.
+* Improved example app usability for testing and documentation.
 
 ## 1.0.0
 

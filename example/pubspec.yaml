@@ -13,6 +13,7 @@ dependencies:
     path: ../
 
   cupertino_icons: ^1.0.9
+  file_picker: ^11.0.2
 
 dev_dependencies:
   integration_test:
