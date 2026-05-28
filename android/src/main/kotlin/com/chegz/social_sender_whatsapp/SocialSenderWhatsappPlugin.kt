@@ -12,6 +12,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import java.io.File
+import java.net.URLConnection
 
 /** SocialSenderWhatsappPlugin */
 class SocialSenderWhatsappPlugin :
@@ -122,11 +123,21 @@ class SocialSenderWhatsappPlugin :
         result: Result
     ) {
         val uris = ArrayList<Uri>()
+        var mimeType = "*/*"
+        
         try {
             for (filePath in files) {
                 val file = File(filePath)
                 val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
                 uris.add(uri)
+                
+                // Try to determine the most specific MIME type if there's only one file
+                if (files.size == 1) {
+                    val guessedMime = URLConnection.guessContentTypeFromName(file.name)
+                    if (guessedMime != null) {
+                        mimeType = guessedMime
+                    }
+                }
             }
         } catch (e: Exception) {
             result.error("FILE_NOT_FOUND", "Error getting URI for file: ${e.message}", null)
@@ -138,10 +149,10 @@ class SocialSenderWhatsappPlugin :
         val jid = if (phone != null && phone.isNotEmpty()) "$phone@s.whatsapp.net" else null
 
         if (isWhatsappInstalled) {
-            whatsappIntents.add(createFileIntent(action, uris, text, jid, "com.whatsapp"))
+            whatsappIntents.add(createFileIntent(action, uris, text, jid, "com.whatsapp", if (uris.size > 1) "*/*" else mimeType))
         }
         if (isBusinessInstalled) {
-            whatsappIntents.add(createFileIntent(action, uris, text, jid, "com.whatsapp.w4b"))
+            whatsappIntents.add(createFileIntent(action, uris, text, jid, "com.whatsapp.w4b", if (uris.size > 1) "*/*" else mimeType))
         }
 
         startChooser(whatsappIntents, result)
@@ -152,25 +163,35 @@ class SocialSenderWhatsappPlugin :
         uris: ArrayList<Uri>,
         text: String?,
         jid: String?,
-        packageName: String
+        packageName: String,
+        mimeType: String
     ): Intent {
-        return Intent(action).apply {
+        val intent = Intent(action).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             `package` = packageName
-            type = "*/*"
+            type = mimeType
+            
             if (jid != null) {
                 putExtra("jid", jid)
             }
             if (text != null) {
                 putExtra(Intent.EXTRA_TEXT, text)
             }
+            
             if (uris.size > 1) {
                 putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
             } else {
                 putExtra(Intent.EXTRA_STREAM, uris[0])
             }
         }
+        
+        // Explicitly grant permission to the target package for each URI
+        uris.forEach { uri ->
+            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        
+        return intent
     }
 
     private fun startChooser(intents: List<Intent>, result: Result) {
@@ -181,9 +202,6 @@ class SocialSenderWhatsappPlugin :
 
         val chooserIntent = Intent.createChooser(intents.first(), "Share with").apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            if (intents.size > 1) {
-                putExtra(Intent.EXTRA_INITIAL_INTENTS, intents.drop(1).toTypedArray())
-            }
         }
 
         try {
