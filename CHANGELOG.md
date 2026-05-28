@@ -3,8 +3,12 @@
 * **Privacy Fix**: Removed hardcoded personal phone number from example and git history.
 * **Major Example Update**: Replaced the static example app with a dynamic form.
     * Added ability to input custom phone numbers and messages.
-    * Integrated `file_picker` to demonstrate real-world file sharing capabilities.
-* Improved example app usability for testing and documentation.
+    * Integrated `image_picker` to demonstrate real-world file sharing capabilities.
+* **Android Improvements**: 
+    * Enhanced image and file sharing reliability with automatic MIME type detection.
+    * Fixed "Permission Denial" errors by explicitly granting URI read permissions.
+    * Resolved "Can't send empty message" error when sharing files without text.
+    * Optimized app launch to open WhatsApp directly if only one version is installed.
 
 ## 1.0.0
 
