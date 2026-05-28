@@ -1,15 +1,15 @@
 group = "com.chegz.social_sender_whatsapp"
-version = "1.0-SNAPSHOT"
+version = "1.0.2"
 
 buildscript {
-    val kotlinVersion = "2.3.20"
+    val kotlinVersion = "2.1.0"
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:9.0.1")
+        classpath("com.android.tools.build:gradle:8.7.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
@@ -23,6 +23,12 @@ allprojects {
 
 plugins {
     id("com.android.library")
+    id("org.jetbrains.kotlin.android") apply false
+}
+
+// Apply the Kotlin plugin if it's not already applied (e.g., by AGP 9.0 built-in support)
+if (project.extensions.findByName("kotlin") == null) {
+    apply(plugin = "org.jetbrains.kotlin.android")
 }
 
 android {
@@ -37,10 +43,10 @@ android {
 
     sourceSets {
         getByName("main") {
-            java.srcDirs("src/main/kotlin")
+            java.srcDir("src/main/kotlin")
         }
         getByName("test") {
-            java.srcDirs("src/test/kotlin")
+            java.srcDir("src/test/kotlin")
         }
     }
 
@@ -65,9 +71,9 @@ android {
     }
 }
 
-kotlin {
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 }
 
