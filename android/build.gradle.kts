@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 group = "com.chegz.social_sender_whatsapp"
 version = "1.0.2"
 
@@ -23,18 +25,13 @@ allprojects {
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android") apply false
-}
-
-// Apply the Kotlin plugin if it's not already applied (e.g., by AGP 9.0 built-in support)
-if (project.extensions.findByName("kotlin") == null) {
-    apply(plugin = "org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
     namespace = "com.chegz.social_sender_whatsapp"
 
-    compileSdk = 36
+    compileSdk = 35
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -71,9 +68,9 @@ android {
     }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    compilerOptions {
-        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 
