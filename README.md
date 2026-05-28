@@ -10,6 +10,7 @@ A Flutter plugin for sending WhatsApp messages and sharing files directly to spe
 
 <a href="https://www.buymeacoffee.com/chegz" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
+
 ## Features
 
 *   **Send Text Messages**: Open WhatsApp with a pre-filled message for a specific contact.
@@ -39,30 +40,8 @@ To enable file sharing and ensure compatibility with Android 11+ (API 30+), add 
 </queries>
 ```
 
-Add the `FileProvider` within the `<application>` tag:
-
-```xml
-<application>
-    <provider
-        android:name="androidx.core.content.FileProvider"
-        android:authorities="${applicationId}.provider"
-        android:exported="false"
-        android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/provider_paths" />
-    </provider>
-</application>
-```
-
-Create `android/app/src/main/res/xml/provider_paths.xml`:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <external-path name="external_files" path="." />
-</paths>
-```
+> [!IMPORTANT]
+> **Do NOT add a FileProvider** manually to your `AndroidManifest.xml`. The plugin handles this internally to prevent manifest merger conflicts.
 
 ### iOS Setup
 

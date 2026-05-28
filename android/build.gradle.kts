@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "com.chegz.social_sender_whatsapp"
-version = "1.0.2"
+version = "1.0.4"
 
 buildscript {
     val kotlinVersion = "2.1.0"
@@ -25,7 +25,12 @@ allprojects {
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.android") apply false
+}
+
+// Apply the Kotlin plugin if it's not already applied (e.g., by AGP 9.0 built-in support)
+if (project.extensions.findByName("kotlin") == null) {
+    apply(plugin = "org.jetbrains.kotlin.android")
 }
 
 android {
@@ -69,6 +74,7 @@ android {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
+    @Suppress("DEPRECATION")
     kotlinOptions {
         jvmTarget = "17"
     }

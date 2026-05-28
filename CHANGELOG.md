@@ -1,3 +1,11 @@
+## 1.0.4
+
+* **Build Compatibility**: Replaced `compilerOptions` with `kotlinOptions` in `build.gradle.kts` to resolve "Unresolved reference" errors in diverse environments.
+* **JVM Target**: Explicitly set to `17` to ensure alignment with modern Flutter project requirements.
+* **Android SDK**: Updated `compileSdk` to `35` for broader compatibility.
+* **File Sharing Fix**: Added `<root-path>` to `provider_paths.xml` to resolve "Failed to find configured root" errors when sharing from internal/cache directories.
+* **Documentation**: Updated `README.md` with critical warnings about manifest conflicts and new feature details.
+
 ## 1.0.3
 
 * **Build Compatibility**: Improved compatibility with older Flutter versions (e.g., 3.41.x) and Android Gradle Plugin (AGP) versions.
