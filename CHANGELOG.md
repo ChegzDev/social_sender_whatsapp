@@ -1,3 +1,10 @@
+## 1.0.3
+
+* **Build Compatibility**: Improved compatibility with older Flutter versions (e.g., 3.41.x) and Android Gradle Plugin (AGP) versions.
+    * Implemented conditional Kotlin plugin application to support both AGP 9.0+ built-in Kotlin and legacy plugin application.
+    * Migrated to task-based JVM target configuration to avoid "unresolved reference" errors in various build environments.
+    * Updated source set configuration to use non-deprecated syntax.
+
 ## 1.0.2
 
 * **Android Optimization**: Improved intent handling to launch WhatsApp directly if only one version is installed.
