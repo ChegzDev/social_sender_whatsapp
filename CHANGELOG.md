@@ -1,3 +1,9 @@
+## 1.0.2
+
+* **Android Optimization**: Improved intent handling to launch WhatsApp directly if only one version is installed.
+* **Bug Fix**: Resolved "Can't send empty message" error when sharing files without additional text.
+* **Stability**: Enhanced image and file sharing reliability with explicit URI permission management.
+
 ## 1.0.1
 
 * **Privacy Fix**: Removed hardcoded personal phone number from example and git history.
