@@ -94,7 +94,9 @@ class SocialSenderWhatsappPlugin :
                     Intent(Intent.ACTION_SEND).apply {
                         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         type = "text/plain"
-                        putExtra(Intent.EXTRA_TEXT, text ?: "")
+                        if (text != null && text.isNotEmpty()) {
+                            putExtra(Intent.EXTRA_TEXT, text)
+                        }
                         `package` = "com.whatsapp"
                     }
                 )
@@ -104,7 +106,9 @@ class SocialSenderWhatsappPlugin :
                     Intent(Intent.ACTION_SEND).apply {
                         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         type = "text/plain"
-                        putExtra(Intent.EXTRA_TEXT, text ?: "")
+                        if (text != null && text.isNotEmpty()) {
+                            putExtra(Intent.EXTRA_TEXT, text)
+                        }
                         `package` = "com.whatsapp.w4b"
                     }
                 )
@@ -123,7 +127,7 @@ class SocialSenderWhatsappPlugin :
         result: Result
     ) {
         val uris = ArrayList<Uri>()
-        var mimeType = "*/*"
+        val mimeTypes = mutableSetOf<String>()
         
         try {
             for (filePath in files) {
@@ -131,28 +135,33 @@ class SocialSenderWhatsappPlugin :
                 val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
                 uris.add(uri)
                 
-                // Try to determine the most specific MIME type if there's only one file
-                if (files.size == 1) {
-                    val guessedMime = URLConnection.guessContentTypeFromName(file.name)
-                    if (guessedMime != null) {
-                        mimeType = guessedMime
-                    }
-                }
+                val guessedMime = URLConnection.guessContentTypeFromName(file.name) ?: "*/*"
+                mimeTypes.add(guessedMime.split("/")[0])
             }
         } catch (e: Exception) {
             result.error("FILE_NOT_FOUND", "Error getting URI for file: ${e.message}", null)
             return
         }
 
-        val whatsappIntents = mutableListOf<Intent>()
         val action = if (uris.size > 1) Intent.ACTION_SEND_MULTIPLE else Intent.ACTION_SEND
-        val jid = if (phone != null && phone.isNotEmpty()) "$phone@s.whatsapp.net" else null
+        
+        // WhatsApp notoriously struggles with 'jid' when sharing multiple files.
+        // For multiple files, we omit the JID to ensure it opens the contact picker reliably.
+        val jid = if (uris.size == 1 && phone != null && phone.isNotEmpty()) "$phone@s.whatsapp.net" else null
+        
+        // Determine final MIME type
+        val finalMimeType = if (uris.size > 1) {
+            if (mimeTypes.size == 1 && mimeTypes.first() != "*") "${mimeTypes.first()}/*" else "*/*"
+        } else {
+             URLConnection.guessContentTypeFromName(File(files[0]).name) ?: "*/*"
+        }
 
+        val whatsappIntents = mutableListOf<Intent>()
         if (isWhatsappInstalled) {
-            whatsappIntents.add(createFileIntent(action, uris, text, jid, "com.whatsapp", if (uris.size > 1) "*/*" else mimeType))
+            whatsappIntents.add(createFileIntent(action, uris, text, jid, "com.whatsapp", finalMimeType))
         }
         if (isBusinessInstalled) {
-            whatsappIntents.add(createFileIntent(action, uris, text, jid, "com.whatsapp.w4b", if (uris.size > 1) "*/*" else mimeType))
+            whatsappIntents.add(createFileIntent(action, uris, text, jid, "com.whatsapp.w4b", finalMimeType))
         }
 
         startChooser(whatsappIntents, result)
@@ -175,7 +184,7 @@ class SocialSenderWhatsappPlugin :
             if (jid != null) {
                 putExtra("jid", jid)
             }
-            if (text != null) {
+            if (text != null && text.isNotEmpty()) {
                 putExtra(Intent.EXTRA_TEXT, text)
             }
             
@@ -200,8 +209,22 @@ class SocialSenderWhatsappPlugin :
             return
         }
 
+        // If only one intent (one app installed), start it directly without chooser
+        if (intents.size == 1) {
+            try {
+                context.startActivity(intents.first())
+                result.success(true)
+                return
+            } catch (e: Exception) {
+                Log.e("ERROR", "Failed to start direct activity: ${e.message}")
+            }
+        }
+
         val chooserIntent = Intent.createChooser(intents.first(), "Share with").apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            if (intents.size > 1) {
+                putExtra(Intent.EXTRA_INITIAL_INTENTS, intents.drop(1).toTypedArray())
+            }
         }
 
         try {
