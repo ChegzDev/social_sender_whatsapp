@@ -22,6 +22,7 @@ void main() {
       } on SocialSenderWhatsappException catch (e) {
         // If WhatsApp is not installed on the test runner, it's a known error
         if (e.type == SocialSenderWhatsappExceptionType.whatsappNotInstalled) {
+          // ignore: avoid_print
           debugPrint('Skipping: WhatsApp not installed on test device');
         } else {
           rethrow;
@@ -37,6 +38,7 @@ void main() {
         expect(result, isTrue);
       } on SocialSenderWhatsappException catch (e) {
         if (e.type == SocialSenderWhatsappExceptionType.whatsappNotInstalled) {
+          // ignore: avoid_print
           debugPrint('Skipping: WhatsApp not installed on test device');
         } else {
           rethrow;
@@ -57,9 +59,11 @@ void main() {
         expect(result, isTrue);
       } on SocialSenderWhatsappException catch (e) {
         if (e.type == SocialSenderWhatsappExceptionType.whatsappNotInstalled) {
+          // ignore: avoid_print
           debugPrint('Skipping: WhatsApp not installed on test device');
         } else {
           // It might throw FILE_NOT_FOUND which is also a valid bridge verification
+          // ignore: avoid_print
           debugPrint('Caught expected exception for dummy file: ${e.type}');
         }
       }
@@ -74,8 +78,10 @@ void main() {
         expect(result, isTrue);
       } on SocialSenderWhatsappException catch (e) {
         if (e.type == SocialSenderWhatsappExceptionType.whatsappNotInstalled) {
+          // ignore: avoid_print
           debugPrint('Skipping: WhatsApp not installed on test device');
         } else {
+          // ignore: avoid_print
           debugPrint('Caught expected exception for dummy files: ${e.type}');
         }
       }

@@ -1,19 +1,19 @@
-## 1.0.5
+## 2.0.0
 
+* **Breaking Change**: Major internal refactor and stabilization.
 * **iOS Refactor**: Complete rewrite of the iOS plugin in Swift for better reliability and modern API usage.
 * **WhatsApp Business (iOS)**: Added support for WhatsApp Business on iOS, including automatic detection and fallbacks.
 * **Improved File Sharing (iOS)**: Implemented WhatsApp-specific UTIs (`net.whatsapp.image`, etc.) to filter the system share sheet, ensuring a more direct sharing experience.
 * **Smart Chooser (Android)**: Implemented an intelligent app chooser that appears only if both WhatsApp and WhatsApp Business are installed.
 * **Permission Management (Android)**: Enhanced URI permission handling using `ClipData` for more robust file sharing across different Android versions.
 * **Cleanup**: Added automatic temporary file cleanup on iOS.
-
-## 1.0.4
-
-* **Build Compatibility**: Replaced `compilerOptions` with `kotlinOptions` in `build.gradle.kts` to resolve "Unresolved reference" errors in diverse environments.
-* **JVM Target**: Explicitly set to `17` to ensure alignment with modern Flutter project requirements.
+* **Build Compatibility**: 
+    * Replaced `compilerOptions` with `kotlinOptions` in `build.gradle.kts`.
+    * Improved compatibility with older Flutter and AGP versions via conditional Kotlin plugin application.
+* **JVM Target**: Explicitly set to `17` to align with modern Flutter requirements.
 * **Android SDK**: Updated `compileSdk` to `35` for broader compatibility.
-* **File Sharing Fix**: Added `<root-path>` to `provider_paths.xml` to resolve "Failed to find configured root" errors when sharing from internal/cache directories.
-* **Documentation**: Updated `README.md` with critical warnings about manifest conflicts and new feature details.
+* **File Sharing Fix**: Added `<root-path>` to `provider_paths.xml` to resolve "Failed to find configured root" errors.
+* **Documentation**: Updated `README.md` with critical configuration details.
 
 ## 1.0.3
 
