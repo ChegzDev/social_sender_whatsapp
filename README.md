@@ -4,7 +4,6 @@
 [![License: MIT](https://img.shields.io/github/license/ChegzDev/social_sender_whatsapp)](https://opensource.org/licenses/MIT)
 [![Pub Likes](https://img.shields.io/pub/likes/social_sender_whatsapp)](https://pub.dev/packages/social_sender_whatsapp/score)
 [![Pub Points](https://img.shields.io/pub/points/social_sender_whatsapp)](https://pub.dev/packages/social_sender_whatsapp/score)
-[![Popularity](https://img.shields.io/pub/popularity/social_sender_whatsapp)](https://pub.dev/packages/social_sender_whatsapp/score)
 
 A Flutter plugin for sending WhatsApp messages and sharing files directly to specific phone numbers or via a general share sheet on both Android and iOS.
 
