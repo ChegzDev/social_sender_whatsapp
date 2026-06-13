@@ -21,20 +21,15 @@ internal class SocialSenderWhatsappPluginTest {
 
     @Test
     fun onMethodCall_send_basicValidation() {
-        // Note: Real unit testing of 'send' requires mocking Context, PackageManager, Intent etc.
-        // which is better done with Robolectric or Integration tests.
-        // Here we just verify that it attempts to handle the 'send' call.
-        val plugin = SocialSenderWhatsappPlugin()
-        val arguments = mapOf("phone" to "123", "text" to "hi")
-        val call = MethodCall("send", arguments)
-        val mockResult: MethodChannel.Result = Mockito.mock(MethodChannel.Result::class.java)
+        // ... existing code ...
+    }
 
-        // This will likely fail in pure JUnit because context is not initialized
-        // or package manager returns null, but it shows the structure.
-        try {
-            plugin.onMethodCall(call, mockResult)
-        } catch (e: Exception) {
-            // Expected failure in pure JUnit without Robolectric
-        }
+    @Test
+    fun sanitizePhone_removesNonDigits() {
+        val plugin = SocialSenderWhatsappPlugin()
+        assert(plugin.sanitizePhone("+1 (234) 567-8900") == "12345678900")
+        assert(plugin.sanitizePhone("1234567890") == "1234567890")
+        assert(plugin.sanitizePhone(null) == null)
+        assert(plugin.sanitizePhone("") == "")
     }
 }

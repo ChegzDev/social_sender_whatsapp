@@ -40,7 +40,7 @@ class SocialSenderWhatsappPlugin :
 
     private fun send(call: MethodCall, result: Result) {
         val text = call.argument<String>("text")
-        val phone = call.argument<String>("phone")
+        val phone = sanitizePhone(call.argument<String>("phone"))
         val files = call.argument<List<String>>("files")
 
         val isWhatsappInstalled = isAppInstalled("com.whatsapp")
@@ -190,8 +190,16 @@ class SocialSenderWhatsappPlugin :
             
             if (uris.size > 1) {
                 putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
+                // Use ClipData for robust permission sharing (API 16+)
+                val clipData = android.content.ClipData.newRawUri("Files", uris[0])
+                for (i in 1 until uris.size) {
+                    clipData.addItem(android.content.ClipData.Item(uris[i]))
+                }
+                setClipData(clipData)
             } else {
                 putExtra(Intent.EXTRA_STREAM, uris[0])
+                // Use ClipData for robust permission sharing (API 16+)
+                setClipData(android.content.ClipData.newRawUri("File", uris[0]))
             }
         }
         
@@ -222,6 +230,13 @@ class SocialSenderWhatsappPlugin :
 
         val chooserIntent = Intent.createChooser(intents.first(), "Share with").apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            
+            // Also copy ClipData to the chooser intent if it exists on the first intent
+            intents.first().clipData?.let {
+                clipData = it
+            }
+
             if (intents.size > 1) {
                 putExtra(Intent.EXTRA_INITIAL_INTENTS, intents.drop(1).toTypedArray())
             }
@@ -233,6 +248,11 @@ class SocialSenderWhatsappPlugin :
         } catch (e: Exception) {
             result.error("ERROR", "Failed to start activity: ${e.message}", null)
         }
+    }
+
+    internal fun sanitizePhone(phone: String?): String? {
+        if (phone == null) return null
+        return phone.replace(Regex("[^0-9]"), "")
     }
 
     private fun isAppInstalled(packageName: String): Boolean {

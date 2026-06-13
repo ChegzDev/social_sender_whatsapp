@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:social_sender_whatsapp/social_sender_whatsapp.dart';
 import 'package:image_picker/image_picker.dart';
@@ -52,6 +54,7 @@ class _MyAppState extends State<MyApp> {
       debugPrint("Send result: $result");
     } on SocialSenderWhatsappException catch (e) {
       if (mounted) {
+        log("Error: ${e.type} - ${e.message}");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Error: ${e.type} - ${e.message}")),
         );
