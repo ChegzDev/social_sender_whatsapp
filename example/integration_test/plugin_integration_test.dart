@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:social_sender_whatsapp/social_sender_whatsapp.dart';
@@ -21,7 +22,7 @@ void main() {
       } on SocialSenderWhatsappException catch (e) {
         // If WhatsApp is not installed on the test runner, it's a known error
         if (e.type == SocialSenderWhatsappExceptionType.whatsappNotInstalled) {
-          print('Skipping: WhatsApp not installed on test device');
+          debugPrint('Skipping: WhatsApp not installed on test device');
         } else {
           rethrow;
         }
@@ -36,7 +37,7 @@ void main() {
         expect(result, isTrue);
       } on SocialSenderWhatsappException catch (e) {
         if (e.type == SocialSenderWhatsappExceptionType.whatsappNotInstalled) {
-          print('Skipping: WhatsApp not installed on test device');
+          debugPrint('Skipping: WhatsApp not installed on test device');
         } else {
           rethrow;
         }
@@ -56,10 +57,10 @@ void main() {
         expect(result, isTrue);
       } on SocialSenderWhatsappException catch (e) {
         if (e.type == SocialSenderWhatsappExceptionType.whatsappNotInstalled) {
-           print('Skipping: WhatsApp not installed on test device');
+          debugPrint('Skipping: WhatsApp not installed on test device');
         } else {
           // It might throw FILE_NOT_FOUND which is also a valid bridge verification
-          print('Caught expected exception for dummy file: ${e.type}');
+          debugPrint('Caught expected exception for dummy file: ${e.type}');
         }
       }
     });
@@ -73,9 +74,9 @@ void main() {
         expect(result, isTrue);
       } on SocialSenderWhatsappException catch (e) {
         if (e.type == SocialSenderWhatsappExceptionType.whatsappNotInstalled) {
-          print('Skipping: WhatsApp not installed on test device');
+          debugPrint('Skipping: WhatsApp not installed on test device');
         } else {
-          print('Caught expected exception for dummy files: ${e.type}');
+          debugPrint('Caught expected exception for dummy files: ${e.type}');
         }
       }
     });
