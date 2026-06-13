@@ -1,3 +1,12 @@
+## 1.0.5
+
+* **iOS Refactor**: Complete rewrite of the iOS plugin in Swift for better reliability and modern API usage.
+* **WhatsApp Business (iOS)**: Added support for WhatsApp Business on iOS, including automatic detection and fallbacks.
+* **Improved File Sharing (iOS)**: Implemented WhatsApp-specific UTIs (`net.whatsapp.image`, etc.) to filter the system share sheet, ensuring a more direct sharing experience.
+* **Smart Chooser (Android)**: Implemented an intelligent app chooser that appears only if both WhatsApp and WhatsApp Business are installed.
+* **Permission Management (Android)**: Enhanced URI permission handling using `ClipData` for more robust file sharing across different Android versions.
+* **Cleanup**: Added automatic temporary file cleanup on iOS.
+
 ## 1.0.4
 
 * **Build Compatibility**: Replaced `compilerOptions` with `kotlinOptions` in `build.gradle.kts` to resolve "Unresolved reference" errors in diverse environments.
